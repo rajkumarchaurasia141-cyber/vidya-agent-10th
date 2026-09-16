@@ -17,36 +17,34 @@ class VidyaAgentApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: Colors.deepPurple,
+        colorSchemeSeed: Colors.indigo,
         brightness: Brightness.light,
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: Colors.deepPurple,
+        colorSchemeSeed: Colors.indigo,
         brightness: Brightness.dark,
       ),
       themeMode: ThemeMode.system,
-      home: const MainDashboardScreen(),
+      home: const HomeScreen(),
     );
   }
 }
 
-class MainDashboardScreen extends StatefulWidget {
-  const MainDashboardScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<MainDashboardScreen> createState() => _MainDashboardScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MainDashboardScreenState extends State<MainDashboardScreen> {
-  int _currentIndex = 0;
+class _HomeScreenState extends State<HomeScreen> {
+  int _tabIndex = 0;
 
-  final List<Widget> _pages = [
-    const NotesSection(),
-    const NcertSolutionsSection(),
-    const PyqSection(),
-    const TestSeriesSection(),
-    const VidyaAiAgentSection(),
+  final List<Widget> _screens = [
+    const SubjectsListScreen(),
+    const FullPyqScreen(),
+    const VidyaAgentDoubtScreen(),
   ];
 
   @override
@@ -57,162 +55,344 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
           children: [
             Icon(Icons.school, color: Colors.amber),
             SizedBox(width: 8),
-            Text(
-              'Vidya Agent: BSEB 10th',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
+            Text('विद्या एजेंट: BSEB 10th', style: TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
-        elevation: 2,
       ),
-      body: _pages[_currentIndex],
+      body: _screens[_tabIndex],
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        selectedIndex: _tabIndex,
+        onDestinationSelected: (i) => setState(() => _tabIndex = i),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.menu_book), label: 'नोट्स'),
-          NavigationDestination(icon: Icon(Icons.assignment), label: 'NCERT हल'),
-          NavigationDestination(icon: Icon(Icons.history_edu), label: 'PYQ (10 Yr)'),
-          NavigationDestination(icon: Icon(Icons.quiz), label: 'टेस्ट'),
-          NavigationDestination(icon: Icon(Icons.smart_toy), label: 'AI एजेंट'),
+          NavigationDestination(icon: Icon(Icons.menu_book), label: 'सभी विषय व नोट्स'),
+          NavigationDestination(icon: Icon(Icons.history_edu), label: '10 वर्ष PYQ'),
+          NavigationDestination(icon: Icon(Icons.camera_enhance), label: 'AI डाउट सॉल्वर'),
         ],
       ),
     );
   }
 }
 
-// ---------------- 1. स्मार्ट नोट्स ----------------
-class NotesSection extends StatelessWidget {
-  const NotesSection({super.key});
+// ---------------- 1. सभी विषयों की सूची स्क्रीन ----------------
+class SubjectsListScreen extends StatelessWidget {
+  const SubjectsListScreen({super.key});
 
-  final List<Map<String, String>> notes = const [
+  final List<Map<String, dynamic>> subjects = const [
     {
-      'title': 'अध्याय 1: वास्तविक संख्याएँ',
-      'subject': 'गणित (Maths)',
-      'content': '• यूक्लिड विभाजन प्रमेयिका: a = bq + r, जहाँ 0 ≤ r < b\n• अंकगणित की आधारभूत प्रमेय: प्रत्येक भाज्य संख्या को अभाज्य संख्याओं के गुणनफल के रूप में व्यक्त किया जा सकता है।\n• HCF(a, b) × LCM(a, b) = a × b\n• परिमेय और अपरिमेय संख्याओं की पहचान (जैसे √2, √3, √5 अपरिमेय संख्याएँ हैं)।'
+      'name': 'गणित (Mathematics)',
+      'icon': Icons.calculate,
+      'color': Colors.blue,
+      'chapters': [
+        'अध्याय 1: वास्तविक संख्याएँ',
+        'अध्याय 2: बहुपद',
+        'अध्याय 3: दो चर वाले रैखिक समीकरण युग्म',
+        'अध्याय 4: द्विघात समीकरण',
+        'अध्याय 5: समांतर श्रेढ़ियाँ (AP)',
+        'अध्याय 6: त्रिभुज',
+        'अध्याय 7: निर्देशांक ज्यामिति',
+        'अध्याय 8: त्रिकोणमिति का परिचय',
+        'अध्याय 9: त्रिकोणमिति के अनुप्रयोग',
+        'अध्याय 10: वृत्त',
+        'अध्याय 11: रचनाएँ',
+        'अध्याय 12: वृत्तों से संबंधित क्षेत्रफल',
+        'अध्याय 13: पृष्ठीय क्षेत्रफल और आयतन',
+        'अध्याय 14: सांख्यिकी',
+        'अध्याय 15: प्रायिकता'
+      ]
     },
     {
-      'title': 'अध्याय 8: त्रिकोणमिति का परिचय',
-      'subject': 'गणित (Maths)',
-      'content': '• sin θ = लम्ब / कर्ण\n• cos θ = आधार / कर्ण\n• tan θ = लम्ब / आधार\n• सर्वसमिकाएँ:\n  1. sin²θ + cos²θ = 1\n  2. 1 + tan²θ = sec²θ\n  3. 1 + cot²θ = cosec²θ'
+      'name': 'विज्ञान (Science)',
+      'icon': Icons.biotech,
+      'color': Colors.green,
+      'chapters': [
+        'भौतिकी - प्रकाश परावर्तन तथा अपवर्तन',
+        'भौतिकी - मानव नेत्र तथा रंगबिरंगा संसार',
+        'भौतिकी - विद्युत और इसके प्रभाव',
+        'भौतिकी - विद्युत धारा के चुंबकीय प्रभाव',
+        'रसायन - रासायनिक अभिक्रियाएँ एवं समीकरण',
+        'रसायन - अम्ल, क्षारक एवं लवण',
+        'रसायन - धातु एवं अधातु',
+        'रसायन - कार्बन एवं उसके यौगिक',
+        'जीव विज्ञान - जैव प्रक्रम (Life Processes)',
+        'जीव विज्ञान - नियंत्रण एवं समन्वय',
+        'जीव विज्ञान - जीव जनन कैसे करते हैं',
+        'जीव विज्ञान - आनुवंशिकता एवं जैव विकास',
+        'हमारा पर्यावरण'
+      ]
     },
     {
-      'title': 'अध्याय 1: रासायनिक अभिक्रियाएँ एवं समीकरण',
-      'subject': 'विज्ञान (Science)',
-      'content': '• संयोजन अभिक्रिया: दो या दो से अधिक पदार्थ मिलकर एकल उत्पाद बनाते हैं।\n• वियोजन अभिक्रिया: एकल अभिकर्मक टूटकर छोटे-छोटे उत्पाद बनाता है।\n• उपचयन एवं अपचयन अभिक्रियाएँ।'
+      'name': 'सामाजिक विज्ञान (Social Science)',
+      'icon': Icons.public,
+      'color': Colors.orange,
+      'chapters': [
+        'इतिहास - यूरोप में राष्ट्रवाद',
+        'इतिहास - समाजवाद एवं साम्यवाद',
+        'इतिहास - भारत में राष्ट्रवाद',
+        'भूगोल - भारत: संसाधन एवं उपयोग',
+        'भूगोल - कृषि, खनिज एवं ऊर्जा संसाधन',
+        'राजनीति विज्ञान - लोकतंत्र में सत्ता की साझेदारी',
+        'अर्थशास्त्र - अर्थव्यवस्था एवं इसके विकास का इतिहास',
+        'आपदा प्रबंधन - प्राकृतिक आपदा एवं प्रबंधन'
+      ]
     },
+    {
+      'name': 'हिंदी (Hindi - गोधूलि & वर्णिका)',
+      'icon': Icons.translate,
+      'color': Colors.purple,
+      'chapters': [
+        'गद्य खंड - श्रम विभाजन और जाति प्रथा',
+        'गद्य खंड - विष के दांत',
+        'गद्य खंड - भारत से हम क्या सीखें',
+        'गद्य खंड - नाखून क्यों बढ़ते हैं',
+        'पद्य खंड - राम नाम बिनु बिरथे जगि जनमा',
+        'वर्णिका - मगम्मा (दही वाली मगम्मा)',
+        'वर्णिका - ढाते विश्वास',
+        'हिंदी व्याकरण - संधि, समास, कारक, पर्यायवाची'
+      ]
+    },
+    {
+      'name': 'संस्कृत (Sanskrit - पीयूषम)',
+      'icon': Icons.auto_stories,
+      'color': Colors.teal,
+      'chapters': [
+        'पाठ 1: मङ्गलम्',
+        'पाठ 2: पाटलिपुत्रवैभवम्',
+        'पाठ 3: अलसकथा',
+        'पाठ 4: संस्कृतसाहित्ये लेखिकाः',
+        'पाठ 5: भारतमहिमा',
+        'संस्कृत व्याकरण - शब्द रूप, धातु रूप एवं अनुवाद'
+      ]
+    }
   ];
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.all(12),
-      itemCount: notes.length,
-      itemBuilder: (context, index) {
-        final item = notes[index];
+      itemCount: subjects.length,
+      itemBuilder: (context, i) {
+        final sub = subjects[i];
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: ExpansionTile(
-            leading: const CircleAvatar(
-              backgroundColor: Colors.deepPurple,
-              child: Icon(Icons.book, color: Colors.white, size: 20),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            leading: CircleAvatar(
+              backgroundColor: (sub['color'] as Color).withAlpha(40),
+              radius: 24,
+              child: Icon(sub['icon'], color: sub['color']),
             ),
-            title: Text(item['title']!, style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(item['subject']!, style: const TextStyle(color: Colors.deepPurpleAccent)),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SelectableText(
-                  item['content']!,
-                  style: const TextStyle(fontSize: 15, height: 1.5),
+            title: Text(
+              sub['name'],
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            subtitle: Text('${(sub['chapters'] as List).length} अध्याय शामिल'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChapterListScreen(
+                    subjectName: sub['name'],
+                    chapters: List<String>.from(sub['chapters']),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ---------------- 2. अध्याय सूची स्क्रीन ----------------
+class ChapterListScreen extends StatelessWidget {
+  final String subjectName;
+  final List<String> chapters;
+
+  const ChapterListScreen({super.key, required this.subjectName, required this.chapters});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(subjectName)),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: chapters.length,
+        itemBuilder: (context, i) {
+          final ch = chapters[i];
+          return Card(
+            margin: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              leading: CircleAvatar(
+                child: Text('${i + 1}'),
+              ),
+              title: Text(ch, style: const TextStyle(fontWeight: FontWeight.w600)),
+              trailing: const Icon(Icons.menu_book),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ChapterDetailScreen(subject: subjectName, chapter: ch),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ---------------- 3. अध्यायवार नोट्स, अभ्यास प्रश्न और क्विज़ स्क्रीन ----------------
+class ChapterDetailScreen extends StatefulWidget {
+  final String subject;
+  final String chapter;
+
+  const ChapterDetailScreen({super.key, required this.subject, required this.chapter});
+
+  @override
+  State<ChapterDetailScreen> createState() => _ChapterDetailScreenState();
+}
+
+class _ChapterDetailScreenState extends State<ChapterDetailScreen> with SingleTickerProviderStateMixin {
+  late TabController _controller;
+  final String _apiKey = 'AQ.Ab8RN6IA1m4s9fIKAcMVV0t3GQ6Q' + 'VtARTT-cmmZ9ti1jurd4dw';
+  String _generatedContent = '';
+  bool _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TabController(length: 3, vsync: this);
+  }
+
+  Future<void> _fetchSmartStudy(String type) async {
+    setState(() {
+      _loading = true;
+      _generatedContent = '';
+    });
+
+    try {
+      final model = GenerativeModel(model: 'gemini-3.6-flash', apiKey: _apiKey);
+      final prompt = 'आप "विद्या एजेंट" हैं - बिहार बोर्ड कक्षा 10वीं हिंदी माध्यम के सबसे अनुभवी शिक्षक। '
+          'विषय: "${widget.subject}", अध्याय: "${widget.chapter}". '
+          'कृपया इस अध्याय के लिए $type तैयार करें। इसे बिल्कुल साफ़, हिंदी में, स्टेप-बाय-स्टेप और बिहार बोर्ड परीक्षा के दृष्टिकोण से दें।';
+
+      final res = await model.generateContent([Content.text(prompt)]);
+      setState(() {
+        _generatedContent = res.text ?? 'कोई डेटा प्राप्त नहीं हुआ।';
+      });
+    } catch (e) {
+      setState(() {
+        _generatedContent = 'त्रुटि: $e';
+      });
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.chapter, style: const TextStyle(fontSize: 16)),
+        bottom: TabBar(
+          controller: _controller,
+          tabs: const [
+            Tab(text: 'स्मार्ट नोट्स'),
+            Tab(text: 'अभ्यास प्रश्न हल'),
+            Tab(text: 'वस्तुनिष्ठ क्विज़'),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _controller,
+        children: [
+          _buildTabContent('विस्तृत परीक्षा नोट्स (मुख्य बिंदु और परिभाषाएँ)'),
+          _buildTabContent('एनसीईआरटी (NCERT) के सभी मुख्य अभ्यास प्रश्नों का चरण-दर-चरण हल'),
+          _buildTabContent('10 महत्वपूर्ण वस्तुनिष्ठ प्रश्न (MCQs) 4 विकल्पों और सही उत्तर सहित'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabContent(String type) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ElevatedButton.icon(
+            onPressed: _loading ? null : () => _fetchSmartStudy(type),
+            icon: const Icon(Icons.auto_awesome),
+            label: Text('$type लोड करें / रिफ्रेश करें'),
+          ),
+          const SizedBox(height: 16),
+          if (_loading)
+            const Center(child: Padding(padding: EdgeInsets.all(32), child: CircularProgressIndicator()))
+          else if (_generatedContent.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: SelectableText(
+                _generatedContent,
+                style: const TextStyle(fontSize: 15, height: 1.5),
+              ),
+            )
+          else
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Text(
+                  'ऊपर बटन दबाकर ${widget.chapter} का संपूर्ण $type तुरंत लोड करें।',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-// ---------------- 2. NCERT संपूर्ण हल ----------------
-class NcertSolutionsSection extends StatelessWidget {
-  const NcertSolutionsSection({super.key});
-
-  final List<Map<String, String>> solutions = const [
-    {
-      'ex': 'प्रश्नावली 1.1 - प्रश्न 1',
-      'q': 'यूक्लिड विभाजन एल्गोरिथ्म से 135 और 225 का HCF ज्ञात कीजिए।',
-      'sol': 'चरण 1: 225 > 135\n225 = 135 × 1 + 90 (शेषफल 90 ≠ 0)\n\nचरण 2: 135 और 90 के लिए:\n135 = 90 × 1 + 45 (शेषफल 45 ≠ 0)\n\nचरण 3: 90 और 45 के लिए:\n90 = 45 × 2 + 0 (शेषफल = 0)\n\nअतः अंतिम भाजक 45 है।\nउत्तर: HCF(135, 225) = 45'
-    },
-    {
-      'ex': 'प्रश्नावली 1.3 - प्रश्न 1',
-      'q': 'सिद्ध कीजिए कि √5 एक अपरिमेय संख्या है।',
-      'sol': 'माना √5 एक परिमेय संख्या है।\n√5 = a/b (जहाँ a और b सह-अभाज्य पूर्णांक हैं, b ≠ 0)\n\nदोनों पक्षों का वर्ग करने पर:\n5 = a² / b²  => a² = 5b²\nअतः a², 5 से विभाज्य है, इसलिए a भी 5 से विभाज्य होगा।\nमान लेते हैं a = 5c\n(5c)² = 5b² => 25c² = 5b² => b² = 5c²\nअतः b भी 5 से विभाज्य होगा।\n\nपरन्तु यह हमारी मान्यता का विरोध करता है कि a और b सह-अभाज्य हैं।\nअतः सिद्ध हुआ कि √5 एक अपरिमेय संख्या है।'
-    },
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: solutions.length,
-      itemBuilder: (context, index) {
-        final item = solutions[index];
-        return Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withAlpha(50),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(item['ex']!, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
-                ),
-                const SizedBox(height: 8),
-                Text('प्रश्न: ${item['q']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                const Divider(height: 24),
-                const Text('समाधान (हल):', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.deepPurple)),
-                const SizedBox(height: 6),
-                SelectableText(item['sol']!, style: const TextStyle(fontSize: 15, height: 1.4)),
-              ],
             ),
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
 
-// ---------------- 3. PYQ (10 वर्ष) ----------------
-class PyqSection extends StatelessWidget {
-  const PyqSection({super.key});
+// ---------------- 4. 10 वर्ष PYQ स्क्रीन ----------------
+class FullPyqScreen extends StatelessWidget {
+  const FullPyqScreen({super.key});
 
-  final List<Map<String, String>> pyqList = const [
+  final List<Map<String, String>> pyqs = const [
     {
       'year': 'BSEB 2024 (वार्षिक)',
-      'subject': 'गणित (Maths)',
-      'q': 'द्विघात समीकरण 2x² - 4x + 3 = 0 का विविक्तकर (Discriminant) क्या होगा?',
-      'ans': 'उत्तर: D = b² - 4ac = (-4)² - 4(2)(3) = 16 - 24 = -8 (वास्तविक मूल नहीं हैं)'
+      'sub': 'गणित',
+      'q': 'द्विघात समीकरण 2x² - 4x + 3 = 0 का विविक्तकर (D) क्या होगा?',
+      'ans': 'D = b² - 4ac = (-4)² - 4(2)(3) = 16 - 24 = -8 (काल्पनिक मूल)'
+    },
+    {
+      'year': 'BSEB 2024 (वार्षिक)',
+      'sub': 'विज्ञान',
+      'q': 'विद्युत आवेश का SI मात्रक क्या होता है?',
+      'ans': 'विद्युत आवेश का SI मात्रक कूलॉम (Coulomb - C) होता है।'
     },
     {
       'year': 'BSEB 2023 (वार्षिक)',
-      'subject': 'विज्ञान (Science)',
-      'q': 'अवतल दर्पण के मुख्य फोकस की परिभाषा लिखिए।',
-      'ans': 'उत्तर: मुख्य अक्ष के समांतर आने वाली प्रकाश किरणें परावर्तन के बाद जिस बिन्दु पर मिलती हैं, उसे मुख्य फोकस कहते हैं।'
+      'sub': 'सामाजिक विज्ञान',
+      'q': 'जालियानवाला बाग हत्याकांड कब और कहाँ हुआ था?',
+      'ans': '13 अप्रैल 1919 को पंजाब के अमृतसर में हुआ था।'
+    },
+    {
+      'year': 'BSEB 2023 (वार्षिक)',
+      'sub': 'हिंदी',
+      'q': 'श्रम विभाजन और जाति प्रथा के लेखक कौन हैं?',
+      'ans': 'डॉ. भीमराव आंबेडकर।'
     },
   ];
 
@@ -220,12 +400,11 @@ class PyqSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.all(12),
-      itemCount: pyqList.length,
-      itemBuilder: (context, index) {
-        final item = pyqList[index];
+      itemCount: pyqs.length,
+      itemBuilder: (context, i) {
+        final p = pyqs[i];
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -234,22 +413,14 @@ class PyqSection extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(item['year']!, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.orange)),
-                    Text(item['subject']!, style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                    Chip(label: Text(p['year']!)),
+                    Text(p['sub']!, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.indigo)),
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(item['q']!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 10),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(item['ans']!, style: const TextStyle(fontSize: 14)),
-                ),
+                Text(p['q']!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 8),
+                Text('उत्तर: ${p['ans']}', style: const TextStyle(color: Colors.green, fontSize: 15)),
               ],
             ),
           ),
@@ -259,204 +430,51 @@ class PyqSection extends StatelessWidget {
   }
 }
 
-// ---------------- 4. ऑनलाइन टेस्ट सीरीज़ ----------------
-class TestSeriesSection extends StatefulWidget {
-  const TestSeriesSection({super.key});
+// ---------------- 5. विद्या AI एजेंट (कैमरा डाउट सॉल्वर) ----------------
+class VidyaAgentDoubtScreen extends StatefulWidget {
+  const VidyaAgentDoubtScreen({super.key});
 
   @override
-  State<TestSeriesSection> createState() => _TestSeriesSectionState();
+  State<VidyaAgentDoubtScreen> createState() => _VidyaAgentDoubtScreenState();
 }
 
-class _TestSeriesSectionState extends State<TestSeriesSection> {
-  final List<Map<String, dynamic>> questions = [
-    {
-      'q': 'π (पाई) एक संख्या है:',
-      'options': ['परिमेय', 'अपरिमेय', 'पूर्णांक', 'इनमें से कोई नहीं'],
-      'correct': 1
-    },
-    {
-      'q': 'द्विघात बहुपद के शून्यकों की अधिकतम संख्या कितनी होती है?',
-      'options': ['1', '2', '3', 'अनंत'],
-      'correct': 1
-    },
-    {
-      'q': 'sin² 45° + cos² 45° का मान क्या होगा?',
-      'options': ['0', '1', '2', '1/2'],
-      'correct': 1
-    },
-  ];
-
-  final Map<int, int> selectedAnswers = {};
-  int? score;
-
-  void _calculateScore() {
-    int total = 0;
-    for (int i = 0; i < questions.length; i++) {
-      if (selectedAnswers[i] == questions[i]['correct']) {
-        total++;
-      }
-    }
-    setState(() {
-      score = total;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.deepPurple.withAlpha(30),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.timer, color: Colors.deepPurple),
-                SizedBox(width: 8),
-                Text('बिहार बोर्ड 10th मॉडल टेस्ट - 01', style: TextStyle(fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          ...List.generate(questions.length, (qIndex) {
-            final q = questions[qIndex];
-            return Card(
-              margin: const EdgeInsets.only(bottom: 12),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('प्र. ${qIndex + 1}: ${q['q']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    const SizedBox(height: 8),
-                    ...List.generate(q['options'].length, (optIndex) {
-                      return RadioListTile<int>(
-                        value: optIndex,
-                        groupValue: selectedAnswers[qIndex],
-                        title: Text(q['options'][optIndex]),
-                        onChanged: (val) {
-                          setState(() {
-                            selectedAnswers[qIndex] = val!;
-                          });
-                        },
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            );
-          }),
-          const SizedBox(height: 12),
-          ElevatedButton.icon(
-            onPressed: _calculateScore,
-            icon: const Icon(Icons.check_circle),
-            label: const Text('टेस्ट सबमिट करें और रिजल्ट देखें'),
-            style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 14)),
-          ),
-          if (score != null) ...[
-            const SizedBox(height: 16),
-            Card(
-              color: Colors.green.withAlpha(40),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  '🎉 आपका स्कोर: $score / ${questions.length}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-// ---------------- 5. विद्या AI एजेंट ----------------
-class VidyaAiAgentSection extends StatefulWidget {
-  const VidyaAiAgentSection({super.key});
-
-  @override
-  State<VidyaAiAgentSection> createState() => _VidyaAiAgentSectionState();
-}
-
-class _VidyaAiAgentSectionState extends State<VidyaAiAgentSection> {
-  final TextEditingController _controller = TextEditingController();
+class _VidyaAgentDoubtScreenState extends State<VidyaAgentDoubtScreen> {
+  final TextEditingController _doubtCtrl = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  File? _selectedImage;
-
+  File? _img;
   final String _apiKey = 'AQ.Ab8RN6IA1m4s9fIKAcMVV0t3GQ6Q' + 'VtARTT-cmmZ9ti1jurd4dw';
+  String _answer = '';
+  bool _busy = false;
 
-  String _result = '';
-  bool _isLoading = false;
-
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final pickedFile = await _picker.pickImage(source: source, imageQuality: 85);
-      if (pickedFile != null) {
-        setState(() {
-          _selectedImage = File(pickedFile.path);
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('फ़ोटो चुनने में त्रुटि: $e')),
-      );
-    }
+  Future<void> _pick(ImageSource s) async {
+    final f = await _picker.pickImage(source: s, imageQuality: 85);
+    if (f != null) setState(() => _img = File(f.path));
   }
 
-  Future<void> _askVidyaAgent() async {
-    final text = _controller.text.trim();
-    if (text.isEmpty && _selectedImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('कृपया अपना सवाल लिखें या किताब की फ़ोटो खींचें!')),
-      );
-      return;
-    }
+  Future<void> _solve() async {
+    final t = _doubtCtrl.text.trim();
+    if (t.isEmpty && _img == null) return;
 
     setState(() {
-      _isLoading = true;
-      _result = '';
+      _busy = true;
+      _answer = '';
     });
 
     try {
-      final model = GenerativeModel(
-        model: 'gemini-3.6-flash',
-        apiKey: _apiKey,
-      );
-
+      final model = GenerativeModel(model: 'gemini-3.6-flash', apiKey: _apiKey);
       final List<Part> parts = [];
-
-      if (_selectedImage != null) {
-        final bytes = await _selectedImage!.readAsBytes();
-        parts.add(DataPart('image/jpeg', bytes));
+      if (_img != null) {
+        parts.add(DataPart('image/jpeg', await _img!.readAsBytes()));
       }
+      parts.add(TextPart(
+          'आप "विद्या एजेंट" हैं - बिहार बोर्ड 10वीं के सर्वोत्तम शिक्षक। छात्र के इस सवाल का चरण-दर-चरण आसान हिंदी में समाधान समझाइए:\n$t'));
 
-      String prompt = 'आप "विद्या एजेंट" हैं - बिहार बोर्ड कक्षा 10वीं के हिंदी माध्यम छात्रों के सर्वोत्तम शिक्षक और सहायक। '
-          'छात्र के सवाल का उत्तर आसान, स्पष्ट और चरण-दर-चरण (Step-by-Step) हिंदी में समझाइए:\n\n$text';
-
-      parts.add(TextPart(prompt));
-
-      final response = await model.generateContent([Content.multi(parts)]);
-
-      setState(() {
-        _result = response.text ?? 'उत्तर प्राप्त नहीं हुआ। कृपया पुनः प्रयास करें।';
-      });
+      final res = await model.generateContent([Content.multi(parts)]);
+      setState(() => _answer = res.text ?? 'उत्तर प्राप्त नहीं हुआ।');
     } catch (e) {
-      setState(() {
-        _result = 'Error: $e';
-      });
+      setState(() => _answer = 'Error: $e');
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() => _busy = false);
     }
   }
 
@@ -468,19 +486,19 @@ class _VidyaAiAgentSectionState extends State<VidyaAiAgentSection> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextField(
-            controller: _controller,
+            controller: _doubtCtrl,
             maxLines: 4,
-            decoration: InputDecoration(
-              hintText: 'गणित या विज्ञान का कोई भी सवाल यहाँ लिखें...',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            decoration: const InputDecoration(
+              hintText: 'किसी भी विषय का कोई भी सवाल यहाँ लिखें...',
+              border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: _isLoading ? null : () => _pickImage(ImageSource.camera),
+                  onPressed: _busy ? null : () => _pick(ImageSource.camera),
                   icon: const Icon(Icons.camera_alt),
                   label: const Text('फ़ोटो खींचें'),
                 ),
@@ -488,54 +506,34 @@ class _VidyaAiAgentSectionState extends State<VidyaAiAgentSection> {
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: _isLoading ? null : () => _pickImage(ImageSource.gallery),
+                  onPressed: _busy ? null : () => _pick(ImageSource.gallery),
                   icon: const Icon(Icons.photo),
                   label: const Text('गैलरी से लें'),
                 ),
               ),
             ],
           ),
-          if (_selectedImage != null) ...[
-            const SizedBox(height: 12),
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(_selectedImage!, height: 160, width: double.infinity, fit: BoxFit.cover),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.cancel, color: Colors.red, size: 26),
-                  onPressed: () {
-                    setState(() {
-                      _selectedImage = null;
-                    });
-                  },
-                ),
-              ],
-            ),
+          if (_img != null) ...[
+            const SizedBox(height: 10),
+            Image.file(_img!, height: 160, fit: BoxFit.cover),
           ],
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           ElevatedButton.icon(
-            onPressed: _isLoading ? null : _askVidyaAgent,
+            onPressed: _busy ? null : _solve,
             icon: const Icon(Icons.auto_awesome),
-            label: const Text('विद्या एजेंट से पूछें (हल पाएं)'),
-            style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 14)),
+            label: const Text('विद्या एजेंट से हल पाएँ'),
           ),
-          const SizedBox(height: 20),
-          if (_isLoading)
+          const SizedBox(height: 16),
+          if (_busy)
             const Center(child: CircularProgressIndicator())
-          else if (_result.isNotEmpty)
+          else if (_answer.isNotEmpty)
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: SelectableText(
-                _result,
-                style: const TextStyle(fontSize: 15, height: 1.5),
-              ),
+              child: SelectableText(_answer, style: const TextStyle(fontSize: 15, height: 1.5)),
             ),
         ],
       ),
